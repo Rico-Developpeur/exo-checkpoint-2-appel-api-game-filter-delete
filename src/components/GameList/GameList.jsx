@@ -4,6 +4,7 @@ import Game from "../Game/Game";
 
 const GameList = () => {
   const [gameList, setGameList] = useState([]);
+  const [ratingGame, setRatingGame] = useState(false);
 
   useEffect(() => {
     axios
@@ -14,35 +15,46 @@ const GameList = () => {
       });
   }, []);
 
-  const handleFilter = () => {
-    const newData = gameList.filter((rat) => rat.rating >= 4.5);
-    setGameList([...newData]);
-  };
-
   return (
     <div>
       <button
         type="button"
         onClick={() => {
-          handleFilter(gameList.rating);
+          setRatingGame(!ratingGame);
         }}
       >
-        Best Games
+        {ratingGame ? "Tous les jeux" : "Jeux les mieux notés"}
       </button>
 
-      {gameList && (
-        <>
-          {gameList.map((game) => (
-            <Game
-              key={game.id}
-              name={game.name}
-              image={game.background_image}
-              rating={game.rating}
-              id={game.id}
-            />
-          ))}
-        </>
-      )}
+      {ratingGame
+        ? gameList && (
+            <>
+              {gameList
+                .filter((rat) => rat.rating >= 4.5)
+                .map((game) => (
+                  <Game
+                    key={game.id}
+                    name={game.name}
+                    image={game.background_image}
+                    rating={game.rating}
+                    id={game.id}
+                  />
+                ))}
+            </>
+          )
+        : gameList && (
+            <>
+              {gameList.map((game) => (
+                <Game
+                  key={game.id}
+                  name={game.name}
+                  image={game.background_image}
+                  rating={game.rating}
+                  id={game.id}
+                />
+              ))}
+            </>
+          )}
     </div>
   );
 };
