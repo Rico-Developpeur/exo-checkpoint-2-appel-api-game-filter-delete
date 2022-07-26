@@ -3,7 +3,9 @@ import axios from "axios";
 import Game from "../Game/Game";
 
 const GameList = () => {
+  //UseState afin de faire le map
   const [gameList, setGameList] = useState([]);
+  //useState rating
   const [ratingGame, setRatingGame] = useState(false);
 
   useEffect(() => {
@@ -14,6 +16,11 @@ const GameList = () => {
         setGameList(data);
       });
   }, []);
+
+  const handleDelete = (id) => {
+    const newData = gameList.filter((game) => game.id !== id);
+    setGameList(newData);
+  };
 
   return (
     <div>
@@ -27,7 +34,8 @@ const GameList = () => {
       </button>
 
       {ratingGame
-        ? gameList && (
+        ? //filtre raiting avec ternaire,
+          gameList && (
             <>
               {gameList
                 .filter((rat) => rat.rating >= 4.5)
@@ -38,6 +46,7 @@ const GameList = () => {
                     image={game.background_image}
                     rating={game.rating}
                     id={game.id}
+                    deleteGame={handleDelete}
                   />
                 ))}
             </>
@@ -51,6 +60,7 @@ const GameList = () => {
                   image={game.background_image}
                   rating={game.rating}
                   id={game.id}
+                  deleteGame={handleDelete}
                 />
               ))}
             </>
